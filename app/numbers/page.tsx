@@ -1,34 +1,40 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import SpeechLearningLayout from "@/components/speech-learning-layout"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import SpeechLearningLayout from "@/components/speech-learning-layout";
 
 export default function NumbersPage() {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [maxNumber, setMaxNumber] = useState(10)
-  const [isConfiguring, setIsConfiguring] = useState(false)
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [maxNumber, setMaxNumber] = useState(10);
+  const [isConfiguring, setIsConfiguring] = useState(false);
 
-  const numbers = Array.from({ length: maxNumber }, (_, i) => (i + 1).toString())
+  const numbers = Array.from({ length: maxNumber }, (_, i) =>
+    (i + 1).toString()
+  );
 
   const handleRestart = () => {
-    setCurrentIndex(0)
-  }
+    setCurrentIndex(0);
+  };
 
   const handleConfigSave = () => {
-    setCurrentIndex(0)
-    setIsConfiguring(false)
-  }
+    setCurrentIndex(0);
+    setIsConfiguring(false);
+  };
 
   const renderNumber = (number: string) => (
     <div className="text-center">
-      <div className="text-8xl md:text-9xl font-bold text-purple-600 mb-4">{number}</div>
-      <p className="text-2xl text-gray-600">Say the number "{number}"</p>
+      <div className="text-8xl md:text-9xl font-bold text-purple-600 mb-4">
+        {number}
+      </div>
+      <p className="text-2xl text-gray-600">
+        Say the number &ldquo;{number}&rdquo;
+      </p>
     </div>
-  )
+  );
 
   if (isConfiguring) {
     return (
@@ -47,15 +53,23 @@ export default function NumbersPage() {
                   min="1"
                   max="100"
                   value={maxNumber}
-                  onChange={(e) => setMaxNumber(Number.parseInt(e.target.value) || 1)}
+                  onChange={(e) =>
+                    setMaxNumber(Number.parseInt(e.target.value) || 1)
+                  }
                 />
-                <p className="text-sm text-gray-500 mt-1">Numbers will go from 1 to {maxNumber}</p>
+                <p className="text-sm text-gray-500 mt-1">
+                  Numbers will go from 1 to {maxNumber}
+                </p>
               </div>
               <div className="flex gap-2">
                 <Button onClick={handleConfigSave} className="flex-1">
                   Start Learning
                 </Button>
-                <Button onClick={() => setIsConfiguring(false)} variant="outline" className="flex-1">
+                <Button
+                  onClick={() => setIsConfiguring(false)}
+                  variant="outline"
+                  className="flex-1"
+                >
                   Cancel
                 </Button>
               </div>
@@ -63,7 +77,7 @@ export default function NumbersPage() {
           </Card>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -83,5 +97,5 @@ export default function NumbersPage() {
         expectedSpeech={(number) => number}
       />
     </div>
-  )
+  );
 }

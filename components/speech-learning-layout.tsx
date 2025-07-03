@@ -16,7 +16,6 @@ import {
   Volume2,
 } from "lucide-react";
 import Link from "next/link";
-import type SpeechRecognition from "speech-recognition";
 
 interface SpeechLearningLayoutProps {
   items: string[];
@@ -40,9 +39,7 @@ export default function SpeechLearningLayout({
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [autoAdvance, setAutoAdvance] = useState(false);
-  const [recognition, setRecognition] = useState<SpeechRecognition | null>(
-    null
-  );
+  const [recognition, setRecognition] = useState<any>(null);
   const [speechSynthesis, setSpeechSynthesis] =
     useState<SpeechSynthesis | null>(null);
   const [feedback, setFeedback] = useState<{
@@ -56,7 +53,8 @@ export default function SpeechLearningLayout({
   useEffect(() => {
     if (typeof window !== "undefined") {
       const SpeechRecognition =
-        window.SpeechRecognition || window.webkitSpeechRecognition;
+        (window as any).SpeechRecognition ||
+        (window as any).webkitSpeechRecognition;
       if (SpeechRecognition) {
         const recognition = new SpeechRecognition();
         recognition.continuous = false;
@@ -68,7 +66,9 @@ export default function SpeechLearningLayout({
     }
 
     return () => {
-      window.speechSynthesis && window.speechSynthesis.cancel();
+      if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
     };
   }, []);
 
@@ -103,7 +103,7 @@ export default function SpeechLearningLayout({
         utterance.rate = 0.5;
         utterance.pitch = 0.5;
         speechSynthesis.speak(utterance);
-        utterance.onend = function (event) {
+        utterance.onend = () => {
           if (autoAdvance) setTimeout(() => nextItem(), 500);
           console.log("ended");
         };
@@ -124,45 +124,34 @@ export default function SpeechLearningLayout({
     setIsListening(true);
     setTranscript("");
     setFeedback({ type: "", message: "" });
-    console.log("yo");
 
-    recognition.onresult = (event) => {
-      try {
-        const result = event.results[0][0].transcript.toLowerCase().trim();
-        setTranscript(result);
+    recognition.onresult = (event: any) => {
+      const result = event.results[0][0].transcript.toLowerCase().trim();
+      setTranscript(result);
 
-        const currentItem = items[currentIndex];
-        const expected = expectedSpeech
-          ? expectedSpeech(currentItem).toLowerCase()
-          : currentItem.toLowerCase();
+      const currentItem = items[currentIndex];
+      const expected = expectedSpeech
+        ? expectedSpeech(currentItem).toLowerCase()
+        : currentItem.toLowerCase();
 
-        console.log("result", result, "expected", expected);
-
-        if (result === expected || result.includes(expected)) {
-          setFeedback({ type: "success", message: "Correct! Well done!" });
-          if (autoAdvance && currentIndex < items.length - 1) {
-            setTimeout(() => {
-              onIndexChange(currentIndex + 1);
-              setTranscript("");
-              setFeedback({ type: "", message: "" });
-            }, 1500);
-          }
-        } else {
-          setFeedback({
-            type: "error",
-            message: `Try again! Say "${expected}"`,
-          });
+      if (result === expected || result.includes(expected)) {
+        setFeedback({ type: "success", message: "Correct! Well done!" });
+        if (autoAdvance && currentIndex < items.length - 1) {
+          setTimeout(() => {
+            onIndexChange(currentIndex + 1);
+            setTranscript("");
+            setFeedback({ type: "", message: "" });
+          }, 1500);
         }
-      } catch (error) {
-        console.error("Error processing speech recognition result:", error);
+      } else {
         setFeedback({
           type: "error",
-          message: "Error processing your speech. Please try again.",
+          message: `Try again! Say &ldquo;${expected}&rdquo;`,
         });
       }
     };
 
-    recognition.onerror = (event) => {
+    recognition.onerror = () => {
       setFeedback({
         type: "error",
         message: "Speech recognition error. Please try again.",
@@ -316,7 +305,7 @@ export default function SpeechLearningLayout({
                 {transcript && (
                   <div className="mt-4 p-3 bg-gray-100 rounded-lg">
                     <p className="text-sm text-gray-600">You said:</p>
-                    <p className="font-medium">"{transcript}"</p>
+                    <p className="font-medium">&ldquo;{transcript}&rdquo;</p>
                   </div>
                 )}
 
