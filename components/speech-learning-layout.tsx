@@ -146,7 +146,7 @@ export default function SpeechLearningLayout({
       } else {
         setFeedback({
           type: "error",
-          message: `Try again! Say &ldquo;${expected}&rdquo;`,
+          message: `Try again! Say "${expected}"`,
         });
       }
     };
@@ -305,7 +305,7 @@ export default function SpeechLearningLayout({
                 {transcript && (
                   <div className="mt-4 p-3 bg-gray-100 rounded-lg">
                     <p className="text-sm text-gray-600">You said:</p>
-                    <p className="font-medium">&ldquo;{transcript}&rdquo;</p>
+                    <p className="font-medium">"{transcript}"</p>
                   </div>
                 )}
 

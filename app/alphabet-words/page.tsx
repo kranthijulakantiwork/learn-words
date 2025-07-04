@@ -189,7 +189,7 @@ export default function AlphabetWordsPage() {
           {wordData.word}
         </div>
         <p className="text-xl text-gray-600">
-          Say &ldquo;{wordData.letter} for {wordData.word}&rdquo;
+          Say "{wordData.letter} for {wordData.word}"
         </p>
       </div>
     );

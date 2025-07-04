@@ -19,9 +19,7 @@ export default function AlphabetsPage() {
       <div className="text-8xl md:text-9xl font-bold text-blue-600 mb-4">
         {letter}
       </div>
-      <p className="text-2xl text-gray-600">
-        Say the letter &ldquo;{letter}&rdquo;
-      </p>
+      <p className="text-2xl text-gray-600">Say the letter "{letter}"</p>
     </div>
   );
 

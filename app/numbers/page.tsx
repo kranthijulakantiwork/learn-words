@@ -30,9 +30,7 @@ export default function NumbersPage() {
       <div className="text-8xl md:text-9xl font-bold text-purple-600 mb-4">
         {number}
       </div>
-      <p className="text-2xl text-gray-600">
-        Say the number &ldquo;{number}&rdquo;
-      </p>
+      <p className="text-2xl text-gray-600">Say the number "{number}"</p>
     </div>
   );
 
